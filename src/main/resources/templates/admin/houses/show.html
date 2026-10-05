@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thy">meleaf.org
+    <head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">  
+		<div th:replace="~{fragment :: meta}"></div>       
+		<div th:replace="~{fragment :: styles}"></div>
+
+        <title>民宿詳細</title>
+    </head>
+    <body>
+        <div class="moattravel-wrapper">
+            <!-- ヘッダー -->
+            <div th:replace="~{fragment :: header}"></div>
+
+            <main>
+                <div class="container pt-4 pb-5 moattravel-container">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-5 col-lg-6 col-md-8">
+                            <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a th:href="@{/admin/houses}">民宿一覧</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">民宿詳細</li>
+                                </ol>
+                            </nav>
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h1 class="h2 mb-0" th:text="${house.getName()}"></h1>
+                                <a th:href="@{__${house.getId()}__/edit}" class="text-link">編集</a>
+                            </div>
+
+                            <div class="mb-4">
+                                <if th:if="${house.getImageName()}">
+                                    <img th:src="@{/storage/__${house.getImageName()}__}" class="w-100 rounded" alt="民宿画像">
+                                </if>
+                                <if th:unless="${house.getImageName()}">
+                                    <img th:src="@{/images/noImage.png}" class="w-100 rounded" alt="NO IMAGE">
+                                </if>
+                            </div>
+
+                            <table class="table">
+                                <tr>
+                                    <th scope="col" class="w-25">ID</th>
+                                    <td th:text="${house.getId()}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">民宿名</th>
+                                    <td th:text="${house.getName()}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">説明</th>
+                                    <td th:text="${house.getDescription()}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">宿泊料金</th>
+                                    <td th:text="${#numbers.formatInteger(house.getPrice(), 1, 'COMMA') + '円'}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">定員</th>
+                                    <td th:text="${house.getCapacity() + '人'}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">郵便番号</th>
+                                    <td th:text="${house.getPostalCode()}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">住所</th>
+                                    <td th:text="${house.getAddress()}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="col">電話番号</th>
+                                    <td th:text="${house.getPhoneNumber()}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- フッター -->
+            <div th:replace="~{fragment :: footer}"></div>
+        </div>
+
+        <div th:replace="~{fragment :: scripts}"></div>
+    </body>
+</html>

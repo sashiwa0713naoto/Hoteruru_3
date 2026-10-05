@@ -49,7 +49,7 @@ public class AdminHouseController {
         model.addAttribute("housePage", housePage);   
         model.addAttribute("keyword", keyword);
         
-        return "admin/houses/index";
+        return "redirect:/admin/houses/index";
     } 
     
     @GetMapping("/{id}")
@@ -78,28 +78,32 @@ public class AdminHouseController {
         
         return "redirect:/admin/houses";
     }
-    
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable(name = "id") Integer id, Model model) {
         House house = houseRepository.getReferenceById(id);
         String imageName = house.getImageName();
-        HouseEditForm houseEditForm = new HouseEditForm();
-        
-        model.addAttribute("imageName", imageName);
+        HouseEditForm houseEditForm = new HouseEditForm(house.getId(), house.getName(), null, house.getDescription(), house.getPrice(), house.getCapacity(), house.getPostalCode(), house.getAddress(), house.getPhoneNumber());
+
+        model.addAttribute("house", house);
         model.addAttribute("houseEditForm", houseEditForm);
-        
+        model.addAttribute("imageName", imageName);
+
         return "admin/houses/edit";
     }
-    
+
     @PostMapping("/{id}/update")
-    public String update(@ModelAttribute @Validated HouseEditForm houseEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String update(@PathVariable(name = "id") Integer id, @ModelAttribute @Validated HouseEditForm houseEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         if (bindingResult.hasErrors()) {
+            House house = houseRepository.getReferenceById(id);
+            String imageName = house.getImageName();
+            model.addAttribute("house", house);
+            model.addAttribute("imageName", imageName);
             return "admin/houses/edit";
         }
-        
+
         houseService.update(houseEditForm);
         redirectAttributes.addFlashAttribute("successMessage", "民宿情報を編集しました。");
-        
+
         return "redirect:/admin/houses";
     }
 }

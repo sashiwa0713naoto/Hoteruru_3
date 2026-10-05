@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>会員情報</title>
+</head>
+<body> 
+    <div th:replace="~{fragment :: header}"></div>
+    <h1>会員情報</h1>
+    <a th:href="@{/user/edit}">編集</a>
+    <div th:if="${successMessage}">
+        <span th:text="${successMessage}"></span>
+    </div>
+    <p>氏名：<span th:text="${user.getName()}"></span></p>
+    <p>フリガナ：<span th:text="${user.getFurigana()}"></span></p>
+    <p>郵便番号：<span th:text="${user.getPostalCode()}"></span></p>
+    <p>住所：<span th:text="${user.getAddress()}"></span></p>
+    <p>電話番号：<span th:text="${user.getPhoneNumber()}"></span></p>
+    <p>メールアドレス：<span th:text="${user.getEmail()}"></span></p>
+    <div th:replace="~{fragment :: footer}"></div>
+</body>
+</html>
