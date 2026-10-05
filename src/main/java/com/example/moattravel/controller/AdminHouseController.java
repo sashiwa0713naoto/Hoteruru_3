@@ -83,7 +83,7 @@ public class AdminHouseController {
     public String edit(@PathVariable(name = "id") Integer id, Model model) {
         House house = houseRepository.getReferenceById(id);
         String imageName = house.getImageName();
-        HouseEditForm houseEditForm = new HouseEditForm(house.getId(), house.getName(), null, house.getDescription(), house.getPrice(), house.getCapacity(), house.getPostalCode(), house.getAddress(), house.getPhoneNumber());
+        HouseEditForm houseEditForm = new HouseEditForm();
         
         model.addAttribute("imageName", imageName);
         model.addAttribute("houseEditForm", houseEditForm);

@@ -10,11 +10,6 @@ public class HouseService {
 		
 	}
 
-	public void create(HouseRegisterForm houseRegisterForm) {
-		// TODO 自動生成されたメソッド・スタブ
-		
-	}
-
 	public void update(HouseEditForm houseEditForm) {
 		// TODO 自動生成されたメソッド・スタブ
 		

@@ -1,0 +1,71 @@
+html {
+    font-size: 14px;
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #f2f0eb;
+    color: #333333;
+}
+
+.moattravel-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+.moattravel-navbar {
+    min-height: 90px;
+}
+
+.moattravel-logo {
+    width: 120px;
+    height: 50px;
+}
+
+footer {
+    height: 60px;
+    background-color: #ffffff;
+}
+
+.moattravel-btn {
+    background-color: #003366 !important;
+    transition: opacity 0.3s ease;
+}
+
+.moattravel-btn:hover {
+    opacity: 0.8;
+}
+
+.moattravel-page-item {
+    margin: 0 3px;
+    border-radius: 5px;
+}
+
+.moattravel-page-link {
+    color: #003366;
+    background-color: #ffffff;
+    border-color: #dee2e6;
+    border-radius: 5px;
+}
+
+.moattravel-page-link:hover {
+    color: #ffffff;
+    background-color: #003366;
+    border-color: #003366;
+}
+
+.page-item.active .moattravel-page-link {
+    z-index: 3;
+    color: #ffffff;
+    background-color: #003366;
+    border-color: #003366;
+}
+
+.moattravel-container {
+    max-width: 1200px;
+}
