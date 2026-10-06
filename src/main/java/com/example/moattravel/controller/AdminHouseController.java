@@ -53,8 +53,11 @@ public class AdminHouseController {
     } 
     
     @GetMapping("/{id}")
-    public String show(@PathVariable(name = "id") Integer id, Model model) {
-        House house = houseRepository.getReferenceById(id);
+    public String index(@RequestParam(name = "keyword", required = false) String keyword,
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable,
+            Model model) {
+        Integer id = null;
+		House house = houseRepository.getReferenceById(id);
         
         model.addAttribute("house", house);
         
