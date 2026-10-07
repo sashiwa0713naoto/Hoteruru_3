@@ -1,43 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
-        <div th:replace="~{fragment :: meta}"></div>   
+        <div th:replace="~{fragment :: meta}"></div>
+
         <div th:replace="~{fragment :: styles}"></div>
-        
-        <title>SAMURAI Travel</title>   
+
+        <title>SAMURAI Travel</title>
     </head>
     <body>
         <div class="moattravel-wrapper">
             <!-- ヘッダー -->
             <div th:replace="~{fragment :: header}"></div>
-            
+
             <main>
-                <div class="container pt-4 pb-5 moattravel-container">
-                    <!-- ログイン成功時のメッセージ表示 -->
-                    <div th:if="${param.loggedIn}" class="alert alert-info">
-                        ログインしました。
-                    </div>
-                    
-                    <!-- ログアウト成功時のメッセージ表示 -->
-                    <div th:if="${param.loggedOut}" class="alert alert-info">
-                        ログアウトしました。
-                    </div>
-                    
+                <!-- トップページのメインコンテンツ -->
+                <div class="container my-5 moattravel-container">
                     <div class="row justify-content-center">
-                        <div class="col-xxl-9 col-xl-10 col-lg-11">
-                            <h1 class="mb-4 text-center">SAMURAI Travelへようこそ</h1>
-                            
-                            <p class="text-center">快適な宿を簡単に検索・予約できます。</p>
+                        <div class="col-md-8 text-center">
+                            <h1 class="display-5 fw-bold mb-3">SAMURAI Travelへようこそ</h1>
+                            <p class="lead text-muted mb-4">日本各地の素敵な民宿を検索・予約できます。</p>
+
+                            <!-- メインアクションボタン -->
+                            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                                <a th:href="@{/houses}" class="btn text-white shadow-sm btn-lg px-4 gap-3 moattravel-btn">民宿一覧を見る</a>
+                                <a th:href="@{/signup}" class="btn btn-outline-secondary btn-lg px-4" sec:authorize="isAnonymous()">新規会員登録</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </main>
-            
+
             <!-- フッター -->
             <div th:replace="~{fragment :: footer}"></div>
         </div>
-        
-        <!-- スクリプト -->
+
         <div th:replace="~{fragment :: scripts}"></div>
     </body>
 </html>

@@ -1,4 +1,4 @@
-package com.example.moattravel.config;
+package com.example.moattravel.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +24,8 @@ public class WebSecurityConfig {
             )
             .formLogin((form) -> form
                 .loginPage("/login")              // ログインページのURL
-                .loginProcessingUrl("/login")     // ログインフォームの送信先URL
-                .defaultSuccessUrl("/?loggedIn")  // ログイン成功時のリダイレクト先
+                .loginProcessingUrl("/login").    // ログインフォームの送信先URL
+                defaultSuccessUrl("/", true)  // ログイン成功時のリダイレクト先
                 .failureUrl("/login?error")       // ログイン失敗時のリダイレクト先
                 .permitAll()
             )

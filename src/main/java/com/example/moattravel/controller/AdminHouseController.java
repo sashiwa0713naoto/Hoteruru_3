@@ -49,15 +49,12 @@ public class AdminHouseController {
         model.addAttribute("housePage", housePage);   
         model.addAttribute("keyword", keyword);
         
-        return "redirect:/admin/houses/index";
+        return "admin/houses/index";
     } 
     
     @GetMapping("/{id}")
-    public String index(@RequestParam(name = "keyword", required = false) String keyword,
-            @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable,
-            Model model) {
-        Integer id = null;
-		House house = houseRepository.getReferenceById(id);
+    public String show(@PathVariable(name = "id") Integer id, Model model) {
+        House house = houseRepository.getReferenceById(id);
         
         model.addAttribute("house", house);
         
@@ -81,32 +78,52 @@ public class AdminHouseController {
         
         return "redirect:/admin/houses";
     }
+
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable(name = "id") Integer id, Model model) {
         House house = houseRepository.getReferenceById(id);
-        String imageName = house.getImageName();
-        HouseEditForm houseEditForm = new HouseEditForm(house.getId(), house.getName(), null, house.getDescription(), house.getPrice(), house.getCapacity(), house.getPostalCode(), house.getAddress(), house.getPhoneNumber());
-
+        HouseEditForm houseEditForm = new HouseEditForm(
+            house.getId(),
+            house.getName(),
+            null,
+            house.getDescription(),
+            house.getPrice(),
+            house.getCapacity(),
+            house.getPostalCode(),
+            house.getAddress(),
+            house.getPhoneNumber()
+        );
+        
         model.addAttribute("house", house);
         model.addAttribute("houseEditForm", houseEditForm);
-        model.addAttribute("imageName", imageName);
-
+        
         return "admin/houses/edit";
     }
 
+    // 民宿更新処理
     @PostMapping("/{id}/update")
-    public String update(@PathVariable(name = "id") Integer id, @ModelAttribute @Validated HouseEditForm houseEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String update(@ModelAttribute @Validated HouseEditForm houseEditForm, 
+                         BindingResult bindingResult, 
+                         RedirectAttributes redirectAttributes, 
+                         Model model) {
         if (bindingResult.hasErrors()) {
-            House house = houseRepository.getReferenceById(id);
-            String imageName = house.getImageName();
+            House house = houseRepository.getReferenceById(houseEditForm.getId());
             model.addAttribute("house", house);
-            model.addAttribute("imageName", imageName);
             return "admin/houses/edit";
         }
-
+        
         houseService.update(houseEditForm);
         redirectAttributes.addFlashAttribute("successMessage", "民宿情報を編集しました。");
+        
+        return "redirect:/admin/houses";
+    }
 
+    // 【追加】民宿削除処理
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+        houseRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "民宿を削除しました。");
+        
         return "redirect:/admin/houses";
     }
 }

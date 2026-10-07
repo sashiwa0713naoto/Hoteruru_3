@@ -22,8 +22,22 @@
                                 <form method="get" th:action="@{/admin/houses}" class="moattravel-search-box mb-3">
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="民宿名">
+                                        <!-- 検索時にも選択中の並び順を維持するための隠しフィールド -->
+                                        <input type="hidden" name="sort" th:value="${sort}" />
                                         <button type="submit" class="btn text-white shadow-sm moattravel-btn">検索</button>
                                     </div>
+                                </form>
+
+                                <!-- 並び替えセレクトボックス （変更時に自動送信） -->
+                                <form method="get" th:action="@{/admin/houses}" class="mb-3">
+                                    <!-- キーワード検索状態を維持するための隠しフィールド -->
+                                    <input type="hidden" name="keyword" th:value="${keyword}">
+                                    <select class="form-select form-select-sm" name="sort" onchange="this.form.submit()">
+                                        <option value="id,asc" th:selected="${sort == 'id,asc'}">IDが新しい順</option>
+                                        <option value="id,desc" th:selected="${sort == 'id,desc'}">IDが古い順</option>
+                                        <option value="price,asc" th:selected="${sort == 'price,asc'}">宿泊料金が安い順</option>
+                                        <option value="price,desc" th:selected="${sort == 'price,desc'}">宿泊料金が高い順</option>
+                                    </select>
                                 </form>
 
                                 <a th:href="@{/admin/houses/register}" class="btn text-white shadow-sm mb-3 moattravel-btn">登録</a>
@@ -33,46 +47,50 @@
                                 <span th:text="${successMessage}"></span>
                             </div>
 
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">民宿名</th>
-                                        <th scope="col">郵便番号</th>
-                                        <th scope="col">住所</th>
-                                        <th scope="col">電話番号</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="house : ${houses}">
-                                        <td th:text="${house.getId()}"></td>
-                                        <td th:text="${house.getName()}"></td>
-                                        <td th:text="${house.getPostalCode()}"></td>
-                                        <td th:text="${house.getAddress()}"></td>
-                                        <td th:text="${house.getPhoneNumber()}"></td>
-										<td><a th:href="@{/admin/houses/__${house.getId()}__}">詳細</a></td>
-										<td><a th:href="@{/admin/houses/__${house.getId()}__/edit}">編集</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+							<table class="table table-striped align-middle">
+							    <thead>
+							        <tr>
+							            <th scope="col" style="width: 15%;">民宿画像</th>
+							            <th scope="col">ID</th>
+							            <th scope="col">民宿名</th>
+							            <th scope="col">郵便番号</th>
+							            <th scope="col" style="width: 30%;">住所</th>
+							            <th scope="col">電話番号</th>
+							            <th scope="col"></th>
+							            <th scope="col"></th>
+							        </tr>
+							    </thead>
+							    <tbody>
+							        <tr th:each="house : ${housePage}">
+							            <td>
+							                <img th:if="${house.getImageName()}" th:src="@{/storage/__${house.getImageName()}__}" class="img-fluid" alt="民宿画像">
+							                <img th:unless="${house.getImageName()}" th:src="@{/images/noImage.png}" class="img-fluid" alt="NO IMAGE">
+							            </td>
+							            <td th:text="${house.getId()}"></td>
+							            <td th:text="${house.getName()}"></td>
+							            <td th:text="${house.getPostalCode()}"></td>
+							            <td th:text="${house.getAddress()}"></td>
+							            <td th:text="${house.getPhoneNumber()}"></td>
+							            <td><a th:href="@{/admin/houses/__${house.getId()}__}">詳細</a></td>
+							            <td><a th:href="@{/admin/houses/__${house.getId()}__/edit}">編集</a></td>
+							        </tr>
+							    </tbody>
+							</table>
 
-                            <!-- ページネーション -->
-                            <div th:if="${houses.getTotalPages() > 1}" class="d-flex justify-content-center">
+                            <div th:if="${housePage.getTotalPages() > 1}" class="d-flex justify-content-center">
                                 <nav aria-label="民宿一覧ページ">
                                     <ul class="pagination">
                                         <li class="page-item">
-                                            <a th:if="${houses.hasPrevious()}" th:href="@{/admin/houses(page = ${houses.getNumber() - 1}, keyword = ${keyword})}" class="page-link moattravel-page-link">前</a>
-                                            <span th:unless="${houses.hasPrevious()}" class="page-link disabled">前</span>
+                                            <a th:if="${housePage.hasPrevious()}" th:href="@{/admin/houses(page = ${housePage.getNumber() - 1}, keyword = ${keyword}, sort = ${sort})}" class="page-link moattravel-page-link">前</a>
+                                            <span th:unless="${housePage.hasPrevious()}" class="page-link disabled">前</span>
                                         </li>
-                                        <li th:each="i : ${#numbers.sequence(0, houses.getTotalPages() - 1)}" class="page-item">
-                                            <a th:if="${i == houses.getNumber()}" th:href="@{/admin/houses(page = ${i}, keyword = ${keyword})}" class="page-link text-white moattravel-active" th:text="${i + 1}"></a>
-                                            <a th:unless="${i == houses.getNumber()}" th:href="@{/admin/houses(page = ${i}, keyword = ${keyword})}" class="page-link moattravel-page-link" th:text="${i + 1}"></a>
+                                        <li th:each="i : ${#numbers.sequence(0, housePage.getTotalPages() - 1)}" class="page-item">
+                                            <a th:if="${i == housePage.getNumber()}" th:href="@{/admin/houses(page = ${i}, keyword = ${keyword}, sort = ${sort})}" class="page-link text-white moattravel-active" th:text="${i + 1}"></a>
+                                            <a th:unless="${i == housePage.getNumber()}" th:href="@{/admin/houses(page = ${i}, keyword = ${keyword}, sort = ${sort})}" class="page-link moattravel-page-link" th:text="${i + 1}"></a>
                                         </li>
                                         <li class="page-item">
-                                            <a th:if="${houses.hasNext()}" th:href="@{/admin/houses(page = ${houses.getNumber() + 1}, keyword = ${keyword})}" class="page-link moattravel-page-link">次</a>
-                                            <span th:unless="${houses.hasNext()}" class="page-link disabled">次</span>
+                                            <a th:if="${housePage.hasNext()}" th:href="@{/admin/houses(page = ${housePage.getNumber() + 1}, keyword = ${keyword}, sort = ${sort})}" class="page-link moattravel-page-link">次</a>
+                                            <span th:unless="${housePage.hasNext()}" class="page-link disabled">次</span>
                                         </li>
                                     </ul>
                                 </nav>

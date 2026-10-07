@@ -1,4 +1,4 @@
-package com.example.moattravel.security;
+package com.example.moattravel.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.moattravel.entity.User;
 import com.example.moattravel.repository.UserRepository;
+import com.example.moattravel.security.UserDetailsImpl;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

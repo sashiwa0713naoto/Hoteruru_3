@@ -36,7 +36,7 @@ public class UserService {
         user.setEmail(signupForm.getEmail());
         user.setPassword(passwordEncoder.encode(signupForm.getPassword()));
         user.setRole(role);
-        user.setEnabled(false);
+        user.setEnabled(true);
 
         return userRepository.save(user);
     }

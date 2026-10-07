@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="https://www.thymeleaf.org">
     <head>
         <div th:replace="~{fragment :: meta}"></div>   
+             
         <div th:replace="~{fragment :: styles}"></div>
         
-        <title>会員情報</title>   
+        <title>会員一覧</title>       
     </head>
     <body>
         <div class="moattravel-wrapper">
@@ -14,81 +15,59 @@
             <main>
                 <div class="container pt-4 pb-5 moattravel-container">
                     <div class="row justify-content-center">
-                        <div class="col-xl-5 col-lg-6 col-md-8">
-                            <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">
-                                    <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">会員情報</li>
-                                </ol>
-                            </nav>
+                        <div class="col-xxl-9 col-xl-10 col-lg-11">
                             
-                            <h1 class="mb-3 text-center">会員情報</h1>
+                            <h1 class="mb-4 text-center">会員一覧</h1>
                             
-                            <div th:if="${successMessage}" class="alert alert-info">
-                                <span th:text="${successMessage}"></span>
+                            <div class="d-flex justify-content-between align-items-end flex-wrap">
+                                <form method="get" th:action="@{/admin/users}" class="mb-3">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="氏名やメールアドレス">
+                                        <button type="submit" class="btn text-white shadow-sm moattravel-btn">検索</button>
+                                    </div>
+                                </form>
                             </div>
                             
-                            <div class="d-flex justify-content-end align-items-end mb-3">
-                                <div>
-                                    <a th:href="@{/user/edit}">編集</a>
-                                </div>
-                            </div>                                                        
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">氏名</th>
+                                        <th scope="col">フリガナ</th>
+                                        <th scope="col">メールアドレス</th>
+                                        <th scope="col">電話番号</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>                                                     
+                                    <tr th:each="user : ${userPage}">
+                                        <td th:text="${user.getName()}"></td>
+                                        <td th:text="${user.getFurigana()}"></td>
+                                        <td th:text="${user.getEmail()}"></td>
+                                        <td th:text="${user.getPhoneNumber()}"></td>
+                                        <td><a th:href="@{/admin/users/__${user.getId()}__}">詳細</a></td>                                        
+                                    </tr>                                      
+                                </tbody>
+                            </table>  
                             
-                            <div class="container pb-5">
-                                <div class="row mb-3">
-                                    <div class="col-3">
-                                        <span class="fw-bold">氏名</span>
-                                    </div>
-                                    <div class="col">
-                                        <span th:text="${user.name}"></span>
-                                    </div>
-                                </div>                   
-                                
-                                <div class="row mb-3">
-                                    <div class="col-3">
-                                        <span class="fw-bold">フリガナ</span>
-                                    </div>
-                                    <div class="col">
-                                        <span th:text="${user.furigana}"></span>
-                                    </div>
-                                </div>                  
-                                
-                                <div class="row mb-3">
-                                    <div class="col-3">
-                                        <span class="fw-bold">郵便番号</span>
-                                    </div>
-                                    <div class="col">
-                                        <span th:text="${user.postalCode}"></span>
-                                    </div>
-                                </div>                  
-                                
-                                <div class="row mb-3">
-                                    <div class="col-3">
-                                        <span class="fw-bold">住所</span>
-                                    </div>
-                                    <div class="col">
-                                        <span th:text="${user.address}"></span>
-                                    </div>
-                                </div>                  
-                                
-                                <div class="row mb-3">
-                                    <div class="col-3">
-                                        <span class="fw-bold">電話番号</span>
-                                    </div>
-                                    <div class="col">
-                                        <span th:text="${user.phoneNumber}"></span>
-                                    </div>
-                                </div>                  
-                                
-                                <div class="row mb-3">
-                                    <div class="col-3">
-                                        <span class="fw-bold">メールアドレス</span>
-                                    </div>
-                                    <div class="col">
-                                        <span th:text="${user.email}"></span>
-                                    </div>
-                                </div>                                                                                                                
-                            </div>                          
+                            <!-- ページネーション -->
+                            <div th:if="${userPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+                                <nav aria-label="会員一覧ページ">
+                                    <ul class="pagination">
+                                        <li class="page-item">
+                                            <span th:if="${userPage.isFirst()}" class="page-link disabled">前</span>
+                                            <a th:unless="${userPage.isFirst()}" th:href="@{/admin/users(page = ${userPage.getNumber() - 1}, keyword = ${keyword})}" class="page-link moattravel-page-link">前</a>
+                                        </li>
+                                        <li th:each="i : ${#numbers.sequence(0, userPage.getTotalPages() - 1)}" class="page-item">
+                                            <span th:if="${i == userPage.getNumber()}" class="page-link active moattravel-active" th:text="${i + 1}"></span>
+                                            <a th:unless="${i == userPage.getNumber()}" th:href="@{/admin/users(page = ${i}, keyword = ${keyword})}" class="page-link moattravel-page-link" th:text="${i + 1}"></a>
+                                        </li>
+                                        <li class="page-item">
+                                            <span th:if="${userPage.isLast()}" class="page-link disabled">次</span>
+                                            <a th:unless="${userPage.isLast()}" th:href="@{/admin/users(page = ${userPage.getNumber() + 1}, keyword = ${keyword})}" class="page-link moattravel-page-link">次</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>                                                                                                
                         </div>
                     </div>
                 </div>

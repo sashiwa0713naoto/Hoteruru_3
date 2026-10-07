@@ -3,9 +3,9 @@ html {
 }
 
 body {
-    font-family: 'Noto Sans JP', sans-serif;
-    background-color: #f2f0eb;
-    color: #333333;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    color: #333;
+    background-color: #f8f9fa;
 }
 
 .moattravel-wrapper {
@@ -33,12 +33,16 @@ footer {
 }
 
 .moattravel-btn {
-    background-color: #003366 !important;
-    transition: opacity 0.3s ease;
+    background-color: #5196a6;
+    border-color: #5196a6;
+    color: #fff;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .moattravel-btn:hover {
-    opacity: 0.8;
+    background-color: #427c8a;
+    border-color: #427c8a;
+    color: #fff;
 }
 
 .moattravel-page-item {
@@ -73,4 +77,10 @@ footer {
     
 .moattravel-container {
     max-width: 1200px;
+}
+
+.moattravel-active {
+    color: #ffffff !important;
+    background-color: #003366 !important;
+    border-color: #003366 !important;
 }

@@ -51,7 +51,7 @@ public class HouseService {
     public void update(HouseEditForm houseEditForm) {
         House house = houseRepository.getReferenceById(houseEditForm.getId());
         MultipartFile imageFile = houseEditForm.getImageFile();
-
+        
         if (!imageFile.isEmpty()) {
             String imageName = imageFile.getOriginalFilename();
             String hashedImageName = generateNewFileName(imageName);
@@ -59,7 +59,7 @@ public class HouseService {
             copyImageFile(imageFile, filePath);
             house.setImageName(hashedImageName);
         }
-
+        
         house.setName(houseEditForm.getName());
         house.setDescription(houseEditForm.getDescription());
         house.setPrice(houseEditForm.getPrice());
@@ -67,11 +67,11 @@ public class HouseService {
         house.setPostalCode(houseEditForm.getPostalCode());
         house.setAddress(houseEditForm.getAddress());
         house.setPhoneNumber(houseEditForm.getPhoneNumber());
-
+        
         houseRepository.save(house);
     }
 
-    // 画像のファイル名をランダムな文字列に変換する
+
     public String generateNewFileName(String fileName) {
         String[] fileNames = fileName.split("\\.");
         int length = fileNames.length;
@@ -79,7 +79,6 @@ public class HouseService {
         return UUID.randomUUID().toString() + "." + extension;
     }
 
-    // 画像ファイルを指定した場所にコピーする
     public void copyImageFile(MultipartFile imageFile, Path filePath) {
         try {
             Files.copy(imageFile.getInputStream(), filePath);
