@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <div th:replace="~{fragment :: meta}"></div>   
              
         <div th:replace="~{fragment :: styles}"></div>
+        
+        <!-- Flatpickr（カレンダー選択用CSS）の読み込み -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         
         <title>民宿詳細</title>       
     </head>
@@ -17,67 +20,97 @@
                     <div class="row justify-content-center">
                         <div class="col-xxl-9 col-xl-10 col-lg-11">
                             
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <h1 th:text="${house.getName()}">民宿名</h1>
-                                <a th:href="@{/houses}" class="text-secondary">&lt; 民宿一覧に戻る</a>
-                            </div>
+                            <!-- パンくずリスト -->
+                            <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                    <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                                    <li class="breadcrumb-item"><a th:href="@{/houses}">民宿一覧</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">民宿詳細</li>
+                                </ol>
+                            </nav>
+
+                            <h1 class="mb-4 text-center" th:text="${house.getName()}">民宿名</h1>
                             
-                            <div th:if="${successMessage}" class="alert alert-info">
-                                <span th:text="${successMessage}"></span>
-                            </div>
-                            
+                            <!-- 画像表示エリア -->
                             <div class="mb-4">
-                                <img th:if="${house.getImageName()}" th:src="@{/storage/__${house.getImageName()}__}" class="w-100 rounded" alt="民宿画像">
-                                <img th:unless="${house.getImageName()}" th:src="@{/images/noImage.png}" class="w-100 rounded" alt="NO IMAGE">
+                                <img th:if="${house.getImageName()}" th:src="@{/storage/__${house.getImageName()}__}" class="w-100 rounded shadow-sm" alt="民宿の画像">
+                                <img th:unless="${house.getImageName()}" th:src="@{/images/no-image.png}" class="w-100 rounded shadow-sm" alt="NO IMAGE">
                             </div>
-                            
-                            <div class="row">
-                                <div class="col-lg-8 container mb-4">
-                                    <form method="get" th:action="@{/houses/__${house.getId()}__/reservations/input}">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="col" class="w-25">民宿名</th>
-                                                        <td th:text="${house.getName()}"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="col">説明</th>
-                                                        <td th:text="${house.getDescription()}"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="col">宿泊料金</th>
-                                                        <td>
-                                                            <span th:text="${#numbers.formatInteger(house.getPrice(), 1, 'COMMA') + '円 / 1泊'}"></span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="col">定員</th>
-                                                        <td th:text="${house.getCapacity() + '人'}"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="col">郵便番号</th>
-                                                        <td th:text="${house.getPostalCode()}"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="col">住所</th>
-                                                        <td th:text="${house.getAddress()}"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="col">電話番号</th>
-                                                        <td th:text="${house.getPhoneNumber()}"></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+
+                            <div class="container">
+                                <div class="row">
+                                    <!-- 民宿情報テーブル -->
+                                    <div class="col-lg-8 container mb-4">
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row" style="width: 30%;">民宿名</th>
+                                                    <td th:text="${house.getName()}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">説明</th>
+                                                    <td th:text="${house.getDescription()}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">宿泊料金</th>
+                                                    <td>
+                                                        <span th:text="${#numbers.formatInteger(house.getPrice(), 1, 'COMMA')}"></span>円 / 1泊
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">定員</th>
+                                                    <td><span th:text="${house.getCapacity()}"></span>人</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">郵便番号</th>
+                                                    <td th:text="${house.getPostalCode()}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">住所</th>
+                                                    <td th:text="${house.getAddress()}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">電話番号</th>
+                                                    <td th:text="${house.getPhoneNumber()}"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- 予約フォームエリア -->
+                                    <div class="col-lg-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <form method="get" th:action="@{/houses/__${house.getId()}__/reservations/input}" th:object="${reservationInputForm}">
+                                                    
+                                                    <!-- チェックイン・チェックアウト -->
+                                                    <div class="form-group mb-2">
+                                                        <label for="fromCheckinDateToCheckoutDate" class="col-form-label text-md-left fw-bold">チェックイン・チェックアウト</label>
+                                                        <div th:if="${#fields.hasErrors('fromCheckinDateToCheckoutDate')}" class="text-danger small mb-2" th:errors="*{fromCheckinDateToCheckoutDate}"></div>
+                                                        <input type="text" class="form-control" th:field="*{fromCheckinDateToCheckoutDate}">
+                                                    </div>
+
+                                                    <!-- 宿泊人数 -->
+                                                    <div class="form-group mb-4">
+                                                        <label for="numberOfPeople" class="col-form-label text-md-left fw-bold">宿泊人数</label>
+                                                        <div th:if="${#fields.hasErrors('numberOfPeople')}" class="text-danger small mb-2" th:errors="*{numberOfPeople}"></div>
+                                                        <input type="number" class="form-control" th:field="*{numberOfPeople}" min="1" th:max="${house.getCapacity()}">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn text-white shadow-sm w-100 moattravel-btn">予約する</button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
-                                        
-                                        <div class="form-group">
-                                            <button type="submit" class="btn text-white shadow-sm w-100 moattravel-btn">予約する</button>
-                                        </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                             
+                            <div class="text-center mt-3">
+                                <a th:href="@{/houses}" class="btn btn-secondary shadow-sm">民宿一覧に戻る</a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -88,5 +121,10 @@
         </div>    
         
         <div th:replace="~{fragment :: scripts}"></div>  
+        
+        <!-- Flatpickr（カレンダー選択用JS）の読み込み -->
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+        <script th:src="@{/js/flatpickr.js}"></script>
     </body>
 </html>

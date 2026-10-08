@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <div th:replace="~{fragment :: meta}"></div>   
+             
+        <div th:replace="~{fragment :: styles}"></div>
+        
+        <title>予約内容確認</title>       
+    </head>
+    <body>
+        <div class="moattravel-wrapper">
+            <!-- ヘッダー -->
+            <div th:replace="~{fragment :: header}"></div>
+            
+            <main>
+                <div class="container pt-4 pb-5 moattravel-container">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-4 col-lg-5 col-md-7 col-sm-9">
+							
+							<li class="breadcrumb-item"><a th:href="@{/houses/__${house.getId()}__}">民宿詳細</a></li>
+                            <h1 class="mb-4 text-center">予約内容確認</h1>
+                            
+                            <form method="post" th:action="@{/houses/__${house.getId()}__/reservations/create}" th:object="${reservationRegisterForm}">
+                                <input type="hidden" th:field="*{houseId}">
+                                <input type="hidden" th:field="*{userId}">
+                                <input type="hidden" th:field="*{checkinDate}">
+                                <input type="hidden" th:field="*{checkoutDate}">
+                                <input type="hidden" th:field="*{numberOfPeople}">
+                                <input type="hidden" th:field="*{amount}">
+                                
+                                <div class="container mb-4">
+                                    <div class="row pb-2 mb-2 border-bottom">
+                                        <div class="col-6 fw-bold">民宿名</div>
+                                        <div class="col-6" th:text="${house.getName()}"></div>
+                                    </div>
+
+                                    <div class="row pb-2 mb-2 border-bottom">
+                                        <div class="col-6 fw-bold">チェックイン日</div>
+                                        <div class="col-6" th:text="${reservationRegisterForm.getCheckinDate()}"></div>
+                                    </div>
+
+                                    <div class="row pb-2 mb-2 border-bottom">
+                                        <div class="col-6 fw-bold">チェックアウト日</div>
+                                        <div class="col-6" th:text="${reservationRegisterForm.getCheckoutDate()}"></div>
+                                    </div>
+
+                                    <div class="row pb-2 mb-2 border-bottom">
+                                        <div class="col-6 fw-bold">宿泊人数</div>
+                                        <div class="col-6"><span th:text="${reservationRegisterForm.getNumberOfPeople()}"></span>人</div>
+                                    </div>
+
+                                    <div class="row pb-2 mb-2 border-bottom">
+                                        <div class="col-6 fw-bold">宿泊料金</div>
+                                        <div class="col-6"><span th:text="${#numbers.formatInteger(reservationRegisterForm.getAmount(), 1, 'COMMA')}"></span>円</div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn text-white shadow-sm w-50 moattravel-btn">確定する</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <!-- フッター -->
+            <div th:replace="~{fragment :: footer}"></div>
+        </div>    
+        
+        <div th:replace="~{fragment :: scripts}"></div>  
+    </body>
+</html>
