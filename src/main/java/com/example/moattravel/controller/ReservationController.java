@@ -71,7 +71,6 @@ public class ReservationController {
         
         return "redirect:/houses/{id}/reservations/confirm";
     }
-
     @GetMapping("/houses/{id}/reservations/confirm")
     public String confirm(@PathVariable(name = "id") Integer id,
                           @ModelAttribute ReservationInputForm reservationInputForm,
@@ -81,11 +80,12 @@ public class ReservationController {
         House house = houseRepository.getReferenceById(id);
         User user = userDetailsImpl.getUser();
         
-        // チェックイン日とチェックアウト日をフォームから取得
-        String checkinDate = reservationInputForm.getCheckinDate();
-        String checkoutDate = reservationInputForm.getCheckoutDate();
+        // 変更：fromCheckinDateToCheckoutDate を " to " で分割する
+        String checkinDateOut = reservationInputForm.getFromCheckinDateToCheckoutDate();
+        String[] checkinDateOutArray = checkinDateOut.split(" to ");
+        String checkinDate = checkinDateOutArray[0];
+        String checkoutDate = checkinDateOutArray[1];
         
-        // 宿泊料金の計算など（ReservationServiceを利用して算出）
         Integer price = house.getPrice();
         Integer amount = reservationService.calculateAmount(checkinDate, checkoutDate, price);
         
