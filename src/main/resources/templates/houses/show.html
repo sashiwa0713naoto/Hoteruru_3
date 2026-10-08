@@ -81,26 +81,27 @@
                                     <div class="col-lg-4">
                                         <div class="card">
                                             <div class="card-body">
-                                                <form method="get" th:action="@{/houses/__${house.getId()}__/reservations/input}" th:object="${reservationInputForm}">
-                                                    
-                                                    <!-- チェックイン・チェックアウト -->
-                                                    <div class="form-group mb-2">
-                                                        <label for="fromCheckinDateToCheckoutDate" class="col-form-label text-md-left fw-bold">チェックイン・チェックアウト</label>
-                                                        <div th:if="${#fields.hasErrors('fromCheckinDateToCheckoutDate')}" class="text-danger small mb-2" th:errors="*{fromCheckinDateToCheckoutDate}"></div>
-                                                        <input type="text" class="form-control" th:field="*{fromCheckinDateToCheckoutDate}">
-                                                    </div>
+												<form method="get" th:action="@{/houses/__${house.getId()}__/reservations/input}" th:object="${reservationInputForm}">
+													<!-- チェックイン・チェックアウト -->
+													<div class="form-group mb-2">
+													    <label for="fromCheckinDateToCheckoutDate" class="col-form-label text-md-left fw-bold">チェックイン・チェックアウト</label>
+													    <!-- 赤文字でエラーを表示 -->
+													    <div th:if="${#fields.hasErrors('fromCheckinDateToCheckoutDate')}" class="text-danger small mb-2" th:errors="*{fromCheckinDateToCheckoutDate}"></div>
+													    <input type="text" class="form-control" th:field="*{fromCheckinDateToCheckoutDate}">
+													</div>
 
-                                                    <!-- 宿泊人数 -->
-                                                    <div class="form-group mb-4">
-                                                        <label for="numberOfPeople" class="col-form-label text-md-left fw-bold">宿泊人数</label>
-                                                        <div th:if="${#fields.hasErrors('numberOfPeople')}" class="text-danger small mb-2" th:errors="*{numberOfPeople}"></div>
-                                                        <input type="number" class="form-control" th:field="*{numberOfPeople}" min="1" th:max="${house.getCapacity()}">
-                                                    </div>
+													<!-- 宿泊人数 -->
+													<div class="form-group mb-4">
+													    <label for="numberOfPeople" class="col-form-label text-md-left fw-bold">宿泊人数</label>
+													    <!-- 赤文字でエラーを表示 -->
+													    <div th:if="${#fields.hasErrors('numberOfPeople')}" class="text-danger small mb-2" th:errors="*{numberOfPeople}"></div>
+													    <input type="number" class="form-control" th:field="*{numberOfPeople}" min="1" th:max="${house.getCapacity()}">
+													</div>
 
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn text-white shadow-sm w-100 moattravel-btn">予約する</button>
-                                                    </div>
-                                                </form>
+												    <div class="form-group">
+												        <button type="submit" class="btn text-white shadow-sm w-100 moattravel-btn">予約する</button>
+												    </div>
+												</form>
                                             </div>
                                         </div>
                                     </div>

@@ -1,5 +1,4 @@
 package com.example.moattravel.form;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -11,7 +11,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ホテルル研修1周目-1</name>
+	<name>ホテルル研修3周目</name>
 	<description/>
 	<url/>
 	<licenses>
@@ -105,7 +105,17 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.example.moattravel1</groupId>
+			<artifactId>moattravel1</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
+<dependency>
+    <groupId>com.stripe</groupId>
+    <artifactId>stripe-java</artifactId>
+    <version>22.28.0</version>
+</dependency>
 
 	<build>
 		<plugins>
