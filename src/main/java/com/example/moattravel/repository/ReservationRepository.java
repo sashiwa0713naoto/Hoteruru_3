@@ -11,4 +11,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     
     public Page<Reservation> findByUserOrderByCreatedAtDesc(User user, Pageable pageable);
+    void deleteByUser(User user);
 }

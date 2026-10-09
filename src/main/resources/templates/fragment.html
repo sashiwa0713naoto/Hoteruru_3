@@ -26,9 +26,14 @@
         <div th:fragment="header" th:remove="tag">
             <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm moattravel-navbar">
                 <div class="container moattravel-container">
-                    <a class="navbar-brand" th:href="@{/}">
-                        <img class="moattravel-logo me-2" th:src="@{/images/logo.png}" alt="moat Travel">
-                    </a>
+					
+					<a class="navbar-brand moattravel-navbar-brand" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/houses}">
+					    <img class="moattravel-logo me-2" th:src="@{/images/logo.png}" alt="SAMURAI Travel">
+					</a>
+
+					<a class="navbar-brand moattravel-navbar-brand" sec:authorize="!hasRole('ROLE_ADMIN')" th:href="@{/}">
+					    <img class="moattravel-logo me-2" th:src="@{/images/logo.png}" alt="SAMURAI Travel">
+					</a>
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>

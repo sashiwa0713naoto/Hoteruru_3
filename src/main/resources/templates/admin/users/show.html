@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <div th:replace="~{fragment :: meta}"></div>   
              
@@ -15,7 +15,7 @@
             <main>
                 <div class="container pt-4 pb-5 moattravel-container">
                     <div class="row justify-content-center">
-                        <div class="col-xxl-9 col-xl-10 col-lg-11">
+                        <div class="col-xl-5 col-lg-6 col-md-8">
                             
                             <!-- パンくずリスト -->
                             <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -26,71 +26,87 @@
                             </nav>
 
                             <h1 class="mb-4 text-center">会員詳細</h1>
-                            
+
+                            <!-- 成功メッセージ -->
+                            <div th:if="${successMessage}" class="alert alert-info">
+                                <span th:text="${successMessage}"></span>
+                            </div>
+
+                            <!-- 会員詳細情報 -->
                             <div class="container mb-4">
                                 <div class="row pb-2 mb-2 border-bottom">
-                                    <div class="col-4 fw-bold">ID</div>
-                                    <div class="col-8" th:text="${user.getId()}"></div>
-                                </div>
-
-                                <div class="row pb-2 mb-2 border-bottom">
-                                    <div class="col-4 fw-bold">氏名</div>
-                                    <div class="col-8" th:text="${user.getName()}"></div>
-                                </div>
-
-                                <div class="row pb-2 mb-2 border-bottom">
-                                    <div class="col-4 fw-bold">フリガナ</div>
-                                    <div class="col-8" th:text="${user.getFurigana()}"></div>
-                                </div>
-
-                                <div class="row pb-2 mb-2 border-bottom">
-                                    <div class="col-4 fw-bold">郵便番号</div>
-                                    <div class="col-8" th:text="${user.getPostalCode()}"></div>
-                                </div>
-
-                                <div class="row pb-2 mb-2 border-bottom">
-                                    <div class="col-4 fw-bold">住所</div>
-                                    <div class="col-8" th:text="${user.getAddress()}"></div>
-                                </div>
-
-                                <div class="row pb-2 mb-2 border-bottom">
-                                    <div class="col-4 fw-bold">電話番号</div>
-                                    <div class="col-8" th:text="${user.getPhoneNumber()}"></div>
-                                </div>
-
-                                <div class="row pb-2 mb-2 border-bottom">
-                                    <div class="col-4 fw-bold">メールアドレス</div>
-                                    <div class="col-8" th:text="${user.getEmail()}"></div>
-                                </div>
-                            </div>
-                            
-                            <!-- 操作ボタンエリア（編集・削除・一覧に戻る） -->
-                            <div class="d-flex justify-content-center align-items-center gap-3">
-                                <a th:href="@{/admin/users/__${user.getId()}__/edit}" class="btn text-white shadow-sm moattravel-btn">編集</a>
-                                
-                                <!-- 削除用トリガー（モーダルを開くリンク、またはPOSTフォーム） -->
-                                <a href="#" class="btn btn-danger shadow-sm" data-bs-toggle="modal" th:data-bs-target="${'#deleteUserModal' + user.getId()}">削除</a>
-                                
-                                <a th:href="@{/admin/users}" class="btn btn-secondary shadow-sm">会員一覧に戻る</a>
-                            </div>
-
-                            <!-- 削除確認モーダル -->
-                            <div class="modal fade" th:id="${'deleteUserModal' + user.getId()}" tabindex="-1" th:aria-labelledby="${'deleteUserModalLabel' + user.getId()}" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" th:id="${'deleteUserModalLabel' + user.getId()}">
-                                                <span th:text="${user.getName()}"></span>さんの会員データを削除してもよろしいですか？
-                                            </h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <form method="post" th:action="@{/admin/users/__${user.getId()}__/delete}">
-                                                <button type="submit" class="btn btn-danger text-white shadow-sm">削除</button>
-                                            </form>
-                                        </div>
+                                    <div class="col-4">
+                                        <span class="fw-bold">ID</span>
+                                    </div>
+                                    <div class="col-8">
+                                        <span th:text="${user.id}"></span>
                                     </div>
                                 </div>
+
+                                <div class="row pb-2 mb-2 border-bottom">
+                                    <div class="col-4">
+                                        <span class="fw-bold">氏名</span>
+                                    </div>
+                                    <div class="col-8">
+                                        <span th:text="${user.name}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row pb-2 mb-2 border-bottom">
+                                    <div class="col-4">
+                                        <span class="fw-bold">フリガナ</span>
+                                    </div>
+                                    <div class="col-8">
+                                        <span th:text="${user.furigana}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row pb-2 mb-2 border-bottom">
+                                    <div class="col-4">
+                                        <span class="fw-bold">郵便番号</span>
+                                    </div>
+                                    <div class="col-8">
+                                        <span th:text="${user.postalCode}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row pb-2 mb-2 border-bottom">
+                                    <div class="col-4">
+                                        <span class="fw-bold">住所</span>
+                                    </div>
+                                    <div class="col-8">
+                                        <span th:text="${user.address}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row pb-2 mb-2 border-bottom">
+                                    <div class="col-4">
+                                        <span class="fw-bold">電話番号</span>
+                                    </div>
+                                    <div class="col-8">
+                                        <span th:text="${user.phoneNumber}"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row pb-2 mb-2 border-bottom">
+                                    <div class="col-4">
+                                        <span class="fw-bold">メールアドレス</span>
+                                    </div>
+                                    <div class="col-8">
+                                        <span th:text="${user.email}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 操作ボタンエリア（重複を解消） -->
+                            <div class="d-flex justify-content-center gap-2">
+                                <a th:href="@{/admin/users/__${user.id}__/edit}" class="btn text-white shadow-sm moattravel-btn me-2">編集</a>
+                                
+                                <form method="post" th:action="@{/admin/users/__${user.id}__/delete}" onsubmit="return confirm('本当にこの会員を削除しますか？');" class="d-inline me-2">
+                                    <button type="submit" class="btn btn-danger text-white shadow-sm">削除</button>
+                                </form>
+                                
+                                <a th:href="@{/admin/users}" class="btn btn-secondary shadow-sm">会員一覧に戻る</a>
                             </div>
 
                         </div>

@@ -20,7 +20,6 @@ public class AdminReservationController {
     public AdminReservationController(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
-
     @GetMapping
     public String index(@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.DESC) Pageable pageable, Model model) {
         Page<Reservation> reservationPage = reservationRepository.findAllByOrderByCreatedAtDesc(pageable);

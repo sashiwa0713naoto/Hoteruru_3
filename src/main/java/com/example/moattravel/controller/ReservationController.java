@@ -53,14 +53,13 @@ public class ReservationController {
                         HttpServletRequest httpServletRequest) {
         User user = userDetailsImpl.getUser();
         
-        // 1. 【最優先】先にStripeからのリダイレクト（session_id）判定を行い、DBに保存する
+       
         String sessionId = httpServletRequest.getParameter("session_id");
         if (sessionId != null) {
             stripeService.createReservation(sessionId);
             model.addAttribute("successMessage", "民宿の予約が完了しました。");
         }
         
-        // 2. 保存完了後にDBから最新の予約一覧データを取得する
         Page<Reservation> reservationPage = reservationRepository.findByUserOrderByCreatedAtDesc(user, pageable);
         model.addAttribute("reservationPage", reservationPage);
         
