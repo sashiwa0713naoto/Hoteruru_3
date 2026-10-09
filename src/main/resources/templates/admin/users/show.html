@@ -100,12 +100,7 @@
 
                             <!-- 操作ボタンエリア（重複を解消） -->
                             <div class="d-flex justify-content-center gap-2">
-                                <a th:href="@{/admin/users/__${user.id}__/edit}" class="btn text-white shadow-sm moattravel-btn me-2">編集</a>
-                                
-                                <form method="post" th:action="@{/admin/users/__${user.id}__/delete}" onsubmit="return confirm('本当にこの会員を削除しますか？');" class="d-inline me-2">
-                                    <button type="submit" class="btn btn-danger text-white shadow-sm">削除</button>
-                                </form>
-                                
+
                                 <a th:href="@{/admin/users}" class="btn btn-secondary shadow-sm">会員一覧に戻る</a>
                             </div>
 

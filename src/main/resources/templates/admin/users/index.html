@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
-        <div th:replace="~{fragment :: meta}"></div>
-
+        <div th:replace="~{fragment :: meta}"></div>   
         <div th:replace="~{fragment :: styles}"></div>
-
-        <title>会員一覧</title>
+        <title>会員一覧</title>       
     </head>
     <body>
-        <div class="moattravel-wrapper">
+        <div class="moattravel-wrapper d-flex flex-column min-vh-100">
             <!-- ヘッダー -->
             <div th:replace="~{fragment :: header}"></div>
-
-            <main>
+            
+            <main class="flex-grow-1">
                 <div class="container pt-4 pb-5 moattravel-container">
                     <div class="row">
                         <div class="col-xxl-9 col-xl-10 col-lg-11 mx-auto">
@@ -31,18 +29,18 @@
                                 <span th:text="${successMessage}"></span>
                             </div>
 
-                            <table class="table table-striped">
+                            <table class="table table-striped align-middle">
                                 <thead>
                                     <tr>
                                         <th scope="col">ID</th>
                                         <th scope="col">氏名</th>
                                         <th scope="col">フリガナ</th>
                                         <th scope="col">メールアドレス</th>
-                                        <th scope="col"></th>
+                                        <th scope="col">詳細</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="user : ${users}">
+                                    <tr th:if="${userPage != null}" th:each="user : ${userPage}">
                                         <td th:text="${user.getId()}"></td>
                                         <td th:text="${user.getName()}"></td>
                                         <td th:text="${user.getFurigana()}"></td>
@@ -53,20 +51,20 @@
                             </table>
 
                             <!-- ページネーション -->
-                            <div th:if="${users.getTotalPages() > 1}" class="d-flex justify-content-center">
+                            <div th:if="${userPage != null and userPage.getTotalPages() > 1}" class="d-flex justify-content-center">
                                 <nav aria-label="会員一覧ページ">
                                     <ul class="pagination">
                                         <li class="page-item">
-                                            <a th:if="${users.hasPrevious()}" th:href="@{/admin/users(page = ${users.getNumber() - 1}, keyword = ${keyword})}" class="page-link moattravel-page-link">前</a>
-                                            <span th:unless="${users.hasPrevious()}" class="page-link disabled">前</span>
+                                            <span th:if="${userPage.isFirst()}" class="page-link disabled">前</span>
+                                            <a th:unless="${userPage.isFirst()}" th:href="@{/admin/users(page = ${userPage.getNumber() - 1}, keyword = ${keyword})}" class="page-link moattravel-page-link">前</a>
                                         </li>
-                                        <li th:each="i : ${#numbers.sequence(0, users.getTotalPages() - 1)}" class="page-item">
-                                            <a th:if="${i == users.getNumber()}" th:href="@{/admin/users(page = ${i}, keyword = ${keyword})}" class="page-link text-white moattravel-active" th:text="${i + 1}"></a>
-                                            <a th:unless="${i == users.getNumber()}" th:href="@{/admin/users(page = ${i}, keyword = ${keyword})}" class="page-link moattravel-page-link" th:text="${i + 1}"></a>
+                                        <li th:each="i : ${#numbers.sequence(0, userPage.getTotalPages() - 1)}" class="page-item">
+                                            <span th:if="${i == userPage.getNumber()}" class="page-link active moattravel-active" th:text="${i + 1}"></span>
+                                            <a th:unless="${i == userPage.getNumber()}" th:href="@{/admin/users(page = ${i}, keyword = ${keyword})}" class="page-link moattravel-page-link" th:text="${i + 1}"></a>
                                         </li>
                                         <li class="page-item">
-                                            <a th:if="${users.hasNext()}" th:href="@{/admin/users(page = ${users.getNumber() + 1}, keyword = ${keyword})}" class="page-link moattravel-page-link">次</a>
-                                            <span th:unless="${users.hasNext()}" class="page-link disabled">次</span>
+                                            <span th:if="${userPage.isLast()}" class="page-link disabled">次</span>
+                                            <a th:unless="${userPage.isLast()}" th:href="@{/admin/users(page = ${userPage.getNumber() + 1}, keyword = ${keyword})}" class="page-link moattravel-page-link">次</a>
                                         </li>
                                     </ul>
                                 </nav>
@@ -75,11 +73,11 @@
                     </div>
                 </div>
             </main>
-
+            
             <!-- フッター -->
             <div th:replace="~{fragment :: footer}"></div>
-        </div>
-
-        <div th:replace="~{fragment :: scripts}"></div>
+        </div>    
+        
+        <div th:replace="~{fragment :: scripts}"></div>  
     </body>
 </html>
